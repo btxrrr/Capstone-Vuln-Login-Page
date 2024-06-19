@@ -1,17 +1,21 @@
-
 function login() {
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
 
-            // Vulnerable hardcoded credentials
-            var valid_username = 'admin';
-            var valid_password = 'password';
-
-            if (username === valid_username && password === valid_password) {
-                alert('Welcome, ' + username + '!');
-                // Redirect to a new page (vulnerable to open redirects)
-                window.location.href = 'welcome.html';
-            } else {
-                alert('Invalid username or password');
-            }
+    // Retrieve stored user data
+    var storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        var user = JSON.parse(storedUser);
+        
+        // Check if the input credentials match the stored credentials
+        if (username === user.username && password === user.password) {
+            alert('Welcome, ' + username + '!');
+            // Redirect to a new page
+            window.location.href = 'welcome.html';
+        } else {
+            alert('Invalid username or password');
         }
+    } else {
+        alert('No registered users. Please register first.');
+    }
+}
