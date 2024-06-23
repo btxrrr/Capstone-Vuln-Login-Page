@@ -63,6 +63,7 @@
 
         .comments-section {
             margin-top: 20px;
+            text-align: left;
         }
 
         .comment {
@@ -70,7 +71,44 @@
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 10px;
-            text-align: left;
+            position: relative;
+        }
+
+        .comment p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .form-group.comment-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-group.comment-input input[type="text"] {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .form-group.comment-input button {
+            padding: 8px 12px;
         }
 
         .top-right {
@@ -110,11 +148,10 @@
         <div class="comments-section">
             <h2>Comments</h2>
             <div id="commentsList"></div>
-            <div class="form-group">
-                <label for="comment">Add Comment:</label>
-                <input type="text" id="comment" name="comment">
+            <div class="form-group comment-input">
+                <input type="text" id="comment" name="comment" placeholder="Add Comment...">
+                <button type="button" onclick="addComment()">Add Comment</button>
             </div>
-            <button type="button" onclick="addComment()">Add Comment</button>
         </div>
         <button onclick="logout()">Logout</button>
     </div>
@@ -161,20 +198,44 @@
             var comments = JSON.parse(localStorage.getItem('comments') || '[]');
             var commentsList = document.getElementById('commentsList');
             commentsList.innerHTML = '';
-            comments.forEach(function(comment) {
+            comments.forEach(function(comment, index) {
                 var commentDiv = document.createElement('div');
                 commentDiv.className = 'comment';
-                commentDiv.innerHTML = comment;
+                commentDiv.innerHTML = '<p>' + comment + '</p>';
+                
+                var deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-btn';
+                deleteButton.addEventListener('click', function() {
+                    deleteComment(index);
+                });
+                
+                commentDiv.appendChild(deleteButton);
                 commentsList.appendChild(commentDiv);
             });
         }
 
         function addComment() {
             var comment = document.getElementById('comment').value;
+            if (!comment.trim()) {
+                alert('Please enter a comment.');
+                return;
+            }
             var comments = JSON.parse(localStorage.getItem('comments') || '[]');
             comments.push(comment);
             localStorage.setItem('comments', JSON.stringify(comments));
             loadComments();
+            document.getElementById('comment').value = ''; // Clear comment input
+        }
+
+        function deleteComment(index) {
+            var comments = JSON.parse(localStorage.getItem('comments') || '[]');
+            if (index >= 0 && index < comments.length) {
+                comments.splice(index, 1);
+                localStorage.setItem('comments', JSON.stringify(comments));
+                loadComments();
+                alert('Comment deleted successfully');
+            }
         }
 
         loadProfile();
