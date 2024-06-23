@@ -1,17 +1,12 @@
 function register() {
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
+    var username = document.getElementById('reg-username').value;
+    var password = document.getElementById('reg-password').value;
+    var role = document.getElementById('reg-role').value; // Assuming a select input for role
 
-    // Simple validation (vulnerable to various attacks)
-    if (username.length < 5 || password.length < 5) {
-        alert('Username and password must be at least 5 characters long.');
-        return;
-    }
-
-    // Insecurely storing user data (example purpose only, don't do this in real apps)
     var user = {
         username: username,
-        password: password
+        password: password,
+        role: role
     };
 
     // Simulate storing user data

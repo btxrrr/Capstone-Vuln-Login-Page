@@ -2,20 +2,34 @@ function login() {
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
 
-    // Retrieve stored user data
-    var storedUser = localStorage.getItem('user');
+    // Retrieve stored user data from localStorage
+    var storedUser = localStorage.getItem(username);
+
     if (storedUser) {
         var user = JSON.parse(storedUser);
-        
+
+        // Debugging: Log user details
+        console.log('Retrieved user:', user);
+
         // Check if the input credentials match the stored credentials
-        if (username === user.username && password === user.password) {
+        if (password === user.password) {
             alert('Welcome, ' + username + '!');
-            // Redirect to a new page with a vulnerable query parameter
-            window.location.href = 'welcome.html?user=' + encodeURIComponent(username);
+
+            // Debugging: Check the user role
+            console.log('User role:', user.role);
+
+            // Redirect based on user role
+            if (user.role === 'admin') {
+                console.log('Redirecting to admin.html');
+                window.location.href = 'admin.html?user=' + encodeURIComponent(username);
+            } else {
+                console.log('Redirecting to user.html');
+                window.location.href = 'user.html?user=' + encodeURIComponent(username);
+            }
         } else {
-            alert('Invalid username or password');
+            alert('Invalid password');
         }
     } else {
-        alert('No registered users. Please register first.');
+        alert('User not found. Please register first.');
     }
 }
