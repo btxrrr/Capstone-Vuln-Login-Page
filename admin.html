@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin Panel</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -50,11 +50,20 @@
         button:hover {
             background-color: #0056b3;
         }
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
+    
     <div class="admin-container">
-        <h1>Admin Page</h1>
+        <div class="top-right">
+            <button onclick="window.location.href='blog.html'">Go to Blog</button>
+        </div>
+        <h1>Admin Panel</h1>
         <h2>Users List</h2>
         <ul id="usersList"></ul>
         <button onclick="logout()">Logout</button>
@@ -65,10 +74,7 @@
             window.location.href = 'index.html';
         }
 
-        if (localStorage.getItem('session') !== 'admin') {
-            window.location.href = 'index.html';
-        }
-
+        // No role check, making this page vulnerable
         function loadUsers() {
             var usersList = document.getElementById('usersList');
             usersList.innerHTML = '';

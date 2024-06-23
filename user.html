@@ -13,6 +13,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
 
         .user-container {
@@ -36,6 +37,7 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -58,9 +60,30 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        .comments-section {
+            margin-top: 20px;
+        }
+
+        .comment {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
+    <div class="top-right">
+        <button onclick="window.location.href='blog.html'">Go to Blog</button>
+    </div>
     <div class="user-container">
         <h1>User Page</h1>
         <h2>Your Profile</h2>
@@ -75,6 +98,24 @@
             </div>
             <button type="button" onclick="updateProfile()">Update Profile</button>
         </form>
+        <h2>Change Email</h2>
+        <form id="emailForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <input type="hidden" id="csrf" name="csrf" value="123456">
+            <button type="button" onclick="changeEmail()">Change Email</button>
+        </form>
+        <div class="comments-section">
+            <h2>Comments</h2>
+            <div id="commentsList"></div>
+            <div class="form-group">
+                <label for="comment">Add Comment:</label>
+                <input type="text" id="comment" name="comment">
+            </div>
+            <button type="button" onclick="addComment()">Add Comment</button>
+        </div>
         <button onclick="logout()">Logout</button>
     </div>
     <script>
@@ -103,12 +144,41 @@
             alert('Profile updated successfully');
         }
 
+        function changeEmail() {
+            var email = document.getElementById('email').value;
+            var csrf = document.getElementById('csrf').value;
+
+            // Simulate storing the new email
+            alert('Email changed to: ' + email);
+        }
+
         function getQueryParameter(name) {
             var urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
 
+        function loadComments() {
+            var comments = JSON.parse(localStorage.getItem('comments') || '[]');
+            var commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = '';
+            comments.forEach(function(comment) {
+                var commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.innerHTML = comment;
+                commentsList.appendChild(commentDiv);
+            });
+        }
+
+        function addComment() {
+            var comment = document.getElementById('comment').value;
+            var comments = JSON.parse(localStorage.getItem('comments') || '[]');
+            comments.push(comment);
+            localStorage.setItem('comments', JSON.stringify(comments));
+            loadComments();
+        }
+
         loadProfile();
+        loadComments();
     </script>
 </body>
 </html>
