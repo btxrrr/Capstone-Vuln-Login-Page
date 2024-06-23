@@ -10,8 +10,8 @@ function login() {
         // Check if the input credentials match the stored credentials
         if (username === user.username && password === user.password) {
             alert('Welcome, ' + username + '!');
-            // Redirect to a new page
-            window.location.href = 'welcome.html';
+            // Redirect to a new page with a vulnerable query parameter
+            window.location.href = 'welcome.html?user=' + encodeURIComponent(username);
         } else {
             alert('Invalid username or password');
         }

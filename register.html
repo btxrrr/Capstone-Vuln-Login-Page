@@ -72,9 +72,41 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
+            <div class="form-group">
+                <label for="adminKey">Admin Key (optional):</label>
+                <input type="text" id="adminKey" name="adminKey">
+            </div>
             <button type="button" onclick="register()">Register</button>
         </form>
     </div>
-    <script src="register.js"></script>
+    <script>
+        function register() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var adminKey = document.getElementById('adminKey').value;
+
+            // Simple validation
+            if (username.length < 5 || password.length < 5) {
+                alert('Username and password must be at least 5 characters long.');
+                return;
+            }
+
+            // Assign role based on admin key
+            var role = adminKey === 'special_admin_key' ? 'admin' : 'user';
+
+            // Store user data
+            var user = {
+                username: username,
+                password: password,
+                role: role
+            };
+
+            localStorage.setItem(username, JSON.stringify(user));
+            alert('User registered successfully!');
+
+            // Redirect to login page
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>

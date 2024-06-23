@@ -76,6 +76,28 @@
         </form>
         <a href="register.html" class="register-link">Don't have an account? Register here</a>
     </div>
-    <script src="script.js"></script>
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Retrieve stored user data
+            var storedUser = JSON.parse(localStorage.getItem(username));
+            if (storedUser && storedUser.password === password) {
+                // Set session based on user role
+                localStorage.setItem('session', storedUser.role);
+                alert('Welcome, ' + username + '!');
+                // Redirect based on user role
+                if (storedUser.role === 'admin') {
+                    window.location.href = 'admin.html?user=' + encodeURIComponent(username);
+                } else {
+                    window.location.href = 'user.html?user=' + encodeURIComponent(username);
+                }
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+    </script>
 </body>
 </html>
+    

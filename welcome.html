@@ -50,13 +50,31 @@
 <body>
     <div class="welcome-container">
         <h1>Welcome!</h1>
-        <p>You've successfully logged in.</p>
+        <p id="welcomeMessage"></p>
         <button onclick="logout()">Logout</button>
     </div>
     <script>
+        function getQueryParameter(name) {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
         function logout() {
-            // Simulate logout by redirecting to login page
+            localStorage.removeItem('session');
             window.location.href = "index.html";
+        }
+
+        // Reflect the user parameter back to the page without sanitization (XSS vulnerability)
+        var user = getQueryParameter('user');
+        if (user) {
+            document.getElementById('welcomeMessage').innerHTML = 'Hello, ' + user + '!';
+            // Simulate setting a session cookie based on the user role
+            var storedUser = JSON.parse(localStorage.getItem(user));
+            if (storedUser) {
+                localStorage.setItem('session', storedUser.role);
+            }
+        } else {
+            document.getElementById('welcomeMessage').innerHTML = 'Hello, guest!';
         }
     </script>
 </body>
